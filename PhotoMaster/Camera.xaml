@@ -11,15 +11,20 @@
         <SolidColorBrush x:Key="TranslucentBlackBrush" Color="Black" Opacity="0.3"/>
     </Page.Resources>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <!--Camera preview-->
         <CaptureElement Name="PreviewControl" Stretch="Uniform"/>
-        <Image Source="Assets/a.jpg" Opacity="0.3"/>
+        <Image Name="mainPic" Source="Assets/demo1.jpg" HorizontalAlignment="Left" Opacity="0.4" Tapped="PhotoControlSwitch"/>
 
         <!-- Capture + Record buttons -->
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+        <StackPanel Name="picContainer" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Black">
             <StackPanel.Resources>
+                <Style TargetType="Image">
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="MaxWidth" Value="100"/>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                </Style>
                 <Style TargetType="Button">
                     <Setter Property="Margin" Value="10,40"/>
                     <Setter Property="MinWidth" Value="80"/>
@@ -30,8 +35,13 @@
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
                 </Style>
             </StackPanel.Resources>
-
-            <Button Name="PhotoButton" Tapped="PhotoButton_Tapped" IsEnabled="False">
+            <StackPanel Name="photoModels">
+                <Image Source="Assets/demo1.jpg" Tapped="ChangePhoto"/>
+                <Image Source="Assets/demo2.jpg" Tapped="ChangePhoto"/>
+                <Image Source="Assets/demo3.jpg" Tapped="ChangePhoto"/>
+                <Image Source="Assets/demo1.jpg" Tapped="ChangePhoto"/>
+            </StackPanel>
+            <Button Name="PhotoButton" Tapped="PhotoButton_Tapped" VerticalAlignment="Center" IsEnabled="True" Visibility="Collapsed" >
                 <Viewbox MaxHeight="40" MaxWidth="40">
                     <SymbolIcon Symbol="Camera"/>
                 </Viewbox>

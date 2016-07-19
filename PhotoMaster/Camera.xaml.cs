@@ -189,6 +189,30 @@ namespace PhotoMaster
             await TakePhotoAsync();
         }
 
+        private void PhotoControlSwitch(object sender, TappedRoutedEventArgs e)
+        {
+            if(PhotoButton.Visibility == Visibility.Visible)
+            {
+                photoModels.Visibility = Visibility.Visible;
+                PhotoButton.Visibility = Visibility.Collapsed;
+                picContainer.VerticalAlignment = VerticalAlignment.Top;
+                picContainer.Background.Opacity = 1;
+            }
+            else
+            {
+                photoModels.Visibility = Visibility.Collapsed;
+                PhotoButton.Visibility = Visibility.Visible;
+                picContainer.VerticalAlignment = VerticalAlignment.Center;
+                picContainer.Background.Opacity = 0;
+            }
+        }
+
+        private void ChangePhoto(object sender, TappedRoutedEventArgs e)
+        {
+            ImageSource source = ((Image)sender).Source;
+            mainPic.Source = source;
+        }
+
         private async void VideoButton_Tapped(object sender, TappedRoutedEventArgs e)
         {
             if (!_isRecording)
@@ -535,7 +559,7 @@ namespace PhotoMaster
         private void UpdateCaptureControls()
         {
             // The buttons should only be enabled if the preview started sucessfully
-            PhotoButton.IsEnabled = _isPreviewing;
+            //PhotoButton.IsEnabled = _isPreviewing;
             //VideoButton.IsEnabled = _isPreviewing;
 
             // Update recording button to show "Stop" icon instead of red "Record" icon
@@ -545,10 +569,10 @@ namespace PhotoMaster
             // If the camera doesn't support simultaneosly taking pictures and recording video, disable the photo button on record
             if (_isInitialized && !_mediaCapture.MediaCaptureSettings.ConcurrentRecordAndPhotoSupported)
             {
-                PhotoButton.IsEnabled = !_isRecording;
+                //PhotoButton.IsEnabled = !_isRecording;
 
                 // Make the button invisible if it's disabled, so it's obvious it cannot be interacted with
-                PhotoButton.Opacity = PhotoButton.IsEnabled ? 1 : 0;
+                //PhotoButton.Opacity = PhotoButton.IsEnabled ? 1 : 0;
             }
         }
 
@@ -776,7 +800,7 @@ namespace PhotoMaster
             var transform = new RotateTransform { Angle = angle };
 
             // The RenderTransform is safe to use (i.e. it won't cause layout issues) in this case, because these buttons have a 1:1 aspect ratio
-            PhotoButton.RenderTransform = transform;
+            //PhotoButton.RenderTransform = transform;
             //VideoButton.RenderTransform = transform;
         }
 
