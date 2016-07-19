@@ -26,6 +26,19 @@ namespace PhotoMaster
         public MainPage()
         {
             this.InitializeComponent();
+
+        }
+
+        private void click_map(object sender, TappedRoutedEventArgs e)
+        {
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(MapPage));
+        }
+
+        private void click_camera(object sender, TappedRoutedEventArgs e)
+        {
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(Camera));
         }
     }
 }
