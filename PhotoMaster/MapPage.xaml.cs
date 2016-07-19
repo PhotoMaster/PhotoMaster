@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Services.Maps;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
@@ -21,11 +25,33 @@ namespace PhotoMaster
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
+
     public sealed partial class MapPage : Page
     {
         public MapPage()
         {
+            suggestions = new ObservableCollection<string>();
             this.InitializeComponent();
+        }
+
+        private ObservableCollection<String> suggestions;
+
+        private void displayPOI(Geopoint snPoint)
+        {
+            // Create a MapIcon.
+            MapIcon mapIcon1 = new MapIcon();
+            mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/a-small.jpg"));
+            mapIcon1.Location = snPoint;
+            mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
+            //mapIcon1.Title = "photo1";
+            mapIcon1.ZIndex = 0;
+
+            // Add the MapIcon to the map.
+            MapControl1.MapElements.Add(mapIcon1);
+
+            // Center the map over the POI.
+            MapControl1.Center = snPoint;
+            MapControl1.ZoomLevel = 14;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -41,10 +67,10 @@ namespace PhotoMaster
                     // Get the current location.
                     Geolocator geolocator = new Geolocator();
                     Geoposition pos = await geolocator.GetGeopositionAsync();
-                    Geopoint myLocation = pos.Coordinate.Point;
+                    cityCenter = pos.Coordinate.Point;
 
                     // Set the map location.
-                    MapControl1.Center = myLocation;
+                    MapControl1.Center = cityCenter;
                     MapControl1.ZoomLevel = 12;
                     MapControl1.LandmarksVisible = true;
                     break;
@@ -65,8 +91,37 @@ namespace PhotoMaster
                     MapControl1.LandmarksVisible = true;
                     break;
             }
+            displayPOI(cityCenter);
+
+        }
 
 
+        private async void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            string addressToGeocode;
+            if (args.ChosenSuggestion != null)
+                addressToGeocode = args.ChosenSuggestion.ToString();
+            else
+                addressToGeocode = sender.Text;
+
+            MapLocationFinderResult result =
+                await MapLocationFinder.FindLocationsAsync(addressToGeocode, MapControl1.Center, 3);
+
+            if (result.Status == MapLocationFinderStatus.Success)
+            {
+
+                MapControl1.Center = result.Locations[0].Point;
+                MapControl1.ZoomLevel = 12;
+                MapControl1.LandmarksVisible = true;
+            }
+        }
+
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            suggestions.Clear();
+            suggestions.Add(sender.Text + "1");
+            suggestions.Add(sender.Text + "2");
+            sender.ItemsSource = suggestions;
         }
     }
 }
