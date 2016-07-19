@@ -13,32 +13,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PhotoMaster
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
-    /// Test
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MapPage : Page
     {
-        public MainPage()
+        public MapPage()
         {
             this.InitializeComponent();
-
-        }
-
-        private void click_map(object sender, TappedRoutedEventArgs e)
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(MapPage));
-        }
-
-        private void click_camera(object sender, TappedRoutedEventArgs e)
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(Camera));
         }
     }
 }
