@@ -117,7 +117,6 @@
     <None Include="PhotoMaster_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="a - Copy.jpg" />
     <Content Include="Assets\a-small.jpg" />
     <Content Include="Assets\a.jpg" />
     <Content Include="Assets\demo1.jpg" />

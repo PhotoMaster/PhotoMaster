@@ -107,17 +107,21 @@ namespace PhotoMaster
             MapLocationFinderResult result =
                 await MapLocationFinder.FindLocationsAsync(addressToGeocode, MapControl1.Center, 3);
 
-            if (result.Status == MapLocationFinderStatus.Success)
+            if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0)
             {
-
                 MapControl1.Center = result.Locations[0].Point;
                 MapControl1.ZoomLevel = 12;
                 MapControl1.LandmarksVisible = true;
+            }
+            else
+            {
+                sender.Text = "";
             }
         }
 
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
+            // TO DO
             suggestions.Clear();
             suggestions.Add(sender.Text + "1");
             suggestions.Add(sender.Text + "2");
