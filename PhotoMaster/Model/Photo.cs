@@ -15,5 +15,31 @@ namespace PhotoMaster.Model
         public Geopoint PhotoGPS;
         public String PhotoDescription;
         public bool PhotoIsSelected;
+        public double PhotoScore;
+        public string PhotoUri;
+
+        public Photo()
+        {
+
+        }
+
+        public Photo(int id, BitmapImage image, Geopoint gps, double score, string uri, String des = null)
+        {
+            PhotoId = id;
+            PhotoUri = uri;
+            PhotoImage = image;
+            PhotoGPS = gps;
+            PhotoIsSelected = false;
+            PhotoScore = score;
+            if (null == des)
+            {
+                PhotoDescription = "This image is a test image, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+            }
+            else
+            {
+                PhotoDescription = des;
+            }
+            
+        }
     }
 }

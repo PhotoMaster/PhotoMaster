@@ -38,25 +38,28 @@ namespace PhotoMaster
         public MapPage()
         {
             suggestions = new ObservableCollection<string>();
-            pm = new PhotoManager();
-
+            pm = PhotoManager.GetInstance();
             this.InitializeComponent();
         }
 
-        private void displayPOI(Geopoint snPoint)
+        private void displayPOI(List<Photo> photos)
         {
+            foreach (Photo photo in photos)
+            {
+                BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
+                Geopoint location = new Geopoint(iconPosition);
+                // Create a MapIcon.
+                MapIcon mapIcon1 = new MapIcon();
+                mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoUri));
+                mapIcon1.Location = location;
+                mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                mapIcon1.ZIndex = 0;
 
-            BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = snPoint.Position.Latitude+0.01, Longitude = snPoint.Position.Longitude+0.01 };
-            Geopoint location = new Geopoint(iconPosition);
-            // Create a MapIcon.
-            MapIcon mapIcon1 = new MapIcon();
-            mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/a-small.jpg"));
-            mapIcon1.Location = location;
-            mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            mapIcon1.ZIndex = 0;
+                // Add the MapIcon to the map.
+                MapControl1.MapElements.Add(mapIcon1);
+            }
 
-            // Add the MapIcon to the map.
-            MapControl1.MapElements.Add(mapIcon1);
+
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -96,7 +99,9 @@ namespace PhotoMaster
                     MapControl1.LandmarksVisible = true;
                     break;
             }
-            displayPOI(cityCenter);
+            List<Photo> photoToShow = pm.getPhotosToShow(MapControl1.Center, MapControl1.ZoomLevel);
+            displayPOI(photoToShow);
+
         }
 
 

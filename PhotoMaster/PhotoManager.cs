@@ -14,10 +14,11 @@ namespace PhotoMaster
 
         private static readonly PhotoManager instance = new PhotoManager();
 
+        private static readonly Db db = new Model.Db();
+
         private PhotoManager()
         {
             AllPhotos = new List<Photo>();
-
             FakeDisplayData();
         }
 
@@ -55,7 +56,7 @@ namespace PhotoMaster
 
         public Photo GetPhotoByGPS(Geopoint pos)
         {
-            foreach(Photo photo in AllPhotos)
+            foreach(Photo photo in db.photos.Values)
             {
                 if (pos.Position.Equals(photo.PhotoGPS.Position))
                 {
@@ -72,14 +73,27 @@ namespace PhotoMaster
         }
 
         private List<Photo> AllPhotos;
+
         public List<Photo> getPhotosToShow(Geopoint center, double zoomLevel)
         {
             List<Photo> ret = new List<Photo>();
 
             // TO DO
             // Return a list of photos shown in screen via map center and zoomLevel.
+             // Should be set by zoomLevel
+            double range = 5.0;
+            foreach (Geopoint p in db.photos.Keys)
+            {
+                if (p.Position.Latitude<center.Position.Latitude+ range && p.Position.Latitude > center.Position.Latitude - range 
+                    && p.Position.Longitude<center.Position.Longitude+ range && p.Position.Longitude > center.Position.Longitude - range)
+                {
+                    ret.Add(db.photos[p]);
+                }
+            }
+            //END
 
             return ret;
         }
+        
     }
 }
