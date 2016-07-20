@@ -27,16 +27,16 @@ namespace PhotoMaster
         public DetailView()
         {
             this.InitializeComponent();
+        }
 
-            m_photo = new Photo();
-
-            // Test data
-            m_photo.PhotoImage = new BitmapImage(new Uri("ms-appx:/Assets/index_bg.png"));
-            m_photo.PhotoDescription = "This image is a test image, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            m_photo = (Photo)e.Parameter;
 
             this.image.Source = m_photo.PhotoImage;
             this.detail.Text = m_photo.PhotoDescription;
         }
+
 
         private Photo m_photo;
     }

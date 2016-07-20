@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhotoMaster.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -43,7 +44,6 @@ namespace PhotoMaster
             mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/a-small.jpg"));
             mapIcon1.Location = snPoint;
             mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
-            //mapIcon1.Title = "photo1";
             mapIcon1.ZIndex = 0;
 
             // Add the MapIcon to the map.
@@ -92,7 +92,6 @@ namespace PhotoMaster
                     break;
             }
             displayPOI(cityCenter);
-
         }
 
 
@@ -128,12 +127,6 @@ namespace PhotoMaster
             sender.ItemsSource = suggestions;
         }
 
-        private void NavigateDetail()
-        {
-            Frame root = Window.Current.Content as Frame;
-            root.Navigate(typeof(DetailView));
-        }
-
         private void OnMapTapped(MapControl sender, MapInputEventArgs args)
         {
             IReadOnlyList<MapElement> mapElements = MapControl1.FindMapElementsAtOffset(args.Position);
@@ -143,7 +136,13 @@ namespace PhotoMaster
                 MapIcon mapIcon = (MapIcon)(mapElement);
                 if (mapIcon == null) continue;
 
-                NavigateDetail();
+                Photo photo = PhotoManager.GetInstance().GetPhotoByGPS(mapIcon.Location);
+                if(photo != null)
+                {
+                    Frame root = Window.Current.Content as Frame;
+                    root.Navigate(typeof(DetailView), photo);
+                }
+                
                 return;
             }
         }

@@ -12,7 +12,7 @@ namespace PhotoMaster.Model
     {
         public int PhotoId;
         public BitmapImage PhotoImage;
-        public Geoposition PhotoGPS;
+        public Geopoint PhotoGPS;
         public String PhotoDescription;
         public bool PhotoIsSelected;
     }
