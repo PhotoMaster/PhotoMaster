@@ -11,6 +11,7 @@ namespace PhotoMaster
 {
     public sealed class PhotoManager
     {
+
         private static readonly PhotoManager instance = new PhotoManager();
 
         private PhotoManager()
@@ -71,5 +72,14 @@ namespace PhotoMaster
         }
 
         private List<Photo> AllPhotos;
+        public List<Photo> getPhotosToShow(Geopoint center, double zoomLevel)
+        {
+            List<Photo> ret = new List<Photo>();
+
+            // TO DO
+            // Return a list of photos shown in screen via map center and zoomLevel.
+
+            return ret;
+        }
     }
 }

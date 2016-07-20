@@ -19,6 +19,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using PhotoMaster.Model;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PhotoMaster
@@ -29,29 +31,32 @@ namespace PhotoMaster
 
     public sealed partial class MapPage : Page
     {
+
+        private ObservableCollection<String> suggestions;
+        private PhotoManager pm;
+
         public MapPage()
         {
             suggestions = new ObservableCollection<string>();
+            pm = new PhotoManager();
+
             this.InitializeComponent();
         }
 
-        private ObservableCollection<String> suggestions;
-
         private void displayPOI(Geopoint snPoint)
         {
+
+            BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = snPoint.Position.Latitude+0.01, Longitude = snPoint.Position.Longitude+0.01 };
+            Geopoint location = new Geopoint(iconPosition);
             // Create a MapIcon.
             MapIcon mapIcon1 = new MapIcon();
             mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/a-small.jpg"));
-            mapIcon1.Location = snPoint;
+            mapIcon1.Location = location;
             mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
             mapIcon1.ZIndex = 0;
 
             // Add the MapIcon to the map.
             MapControl1.MapElements.Add(mapIcon1);
-
-            // Center the map over the POI.
-            MapControl1.Center = snPoint;
-            MapControl1.ZoomLevel = 14;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -71,7 +76,7 @@ namespace PhotoMaster
 
                     // Set the map location.
                     MapControl1.Center = cityCenter;
-                    MapControl1.ZoomLevel = 12;
+                    MapControl1.ZoomLevel = 14;
                     MapControl1.LandmarksVisible = true;
                     break;
 
@@ -79,7 +84,7 @@ namespace PhotoMaster
                     // Handle the case  if access to location is denied.
                     // Set the map location.
                     MapControl1.Center = cityCenter;
-                    MapControl1.ZoomLevel = 12;
+                    MapControl1.ZoomLevel = 14;
                     MapControl1.LandmarksVisible = true;
                     break;
 
@@ -87,7 +92,7 @@ namespace PhotoMaster
                     // Handle the case if  an unspecified error occurs.
                     // Set the map location.
                     MapControl1.Center = cityCenter;
-                    MapControl1.ZoomLevel = 12;
+                    MapControl1.ZoomLevel = 14;
                     MapControl1.LandmarksVisible = true;
                     break;
             }
@@ -109,7 +114,7 @@ namespace PhotoMaster
             if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0)
             {
                 MapControl1.Center = result.Locations[0].Point;
-                MapControl1.ZoomLevel = 12;
+                MapControl1.ZoomLevel = 14;
                 MapControl1.LandmarksVisible = true;
             }
             else
@@ -122,8 +127,18 @@ namespace PhotoMaster
         {
             // TO DO
             suggestions.Clear();
-            suggestions.Add(sender.Text + "1");
-            suggestions.Add(sender.Text + "2");
+            /*
+            int maxSuggestion = 2;
+            List<string> similarNames = findSimilarNames(sender.Text);
+            for(int i=0;i<similarNames.Count || i< maxSuggestion; i++)
+            {
+                suggestions.Add(similarNames[i]);
+            }
+            */
+            suggestions.Add("suggestion1");
+            suggestions.Add("suggestion2");
+
+            // END
             sender.ItemsSource = suggestions;
         }
 
@@ -147,6 +162,16 @@ namespace PhotoMaster
             }
         }
 
+
+        private List<string> findSimilarNames(string palace_name)
+        {
+            List<string> ret = new List<string>();
+
+            // TO DO
+            // Return similar palace_names of name in search bar.
+
+            return ret;
+        }
 
     }
 }
