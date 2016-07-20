@@ -12,6 +12,8 @@
         <TextBlock Height="30" Margin="29,31,178,0" TextWrapping="Wrap" Text="Photo Details" VerticalAlignment="Top" FontSize="21.333"/>
         <Image x:Name="image" Margin="29,100,39,191"/>
         <TextBlock x:Name="detail" Height="126" Margin="29,0,39,40" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom"/>
+        <Image x:Name="image1" HorizontalAlignment="Left" Margin="10,261,0,288" Width="86" Source="Assets/arrow-left.gif"/>
+        <Image x:Name="image1_Copy" HorizontalAlignment="Right" Margin="0,261,10,288" Width="86" Source="Assets/arrow-right.gif"/>
 
     </Grid>
 </Page>

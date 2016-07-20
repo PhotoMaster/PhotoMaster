@@ -127,5 +127,27 @@ namespace PhotoMaster
             suggestions.Add(sender.Text + "2");
             sender.ItemsSource = suggestions;
         }
+
+        private void NavigateDetail()
+        {
+            Frame root = Window.Current.Content as Frame;
+            root.Navigate(typeof(DetailView));
+        }
+
+        private void OnMapTapped(MapControl sender, MapInputEventArgs args)
+        {
+            IReadOnlyList<MapElement> mapElements = MapControl1.FindMapElementsAtOffset(args.Position);
+
+            foreach (MapElement mapElement in mapElements)
+            {
+                MapIcon mapIcon = (MapIcon)(mapElement);
+                if (mapIcon == null) continue;
+
+                NavigateDetail();
+                return;
+            }
+        }
+
+
     }
 }
