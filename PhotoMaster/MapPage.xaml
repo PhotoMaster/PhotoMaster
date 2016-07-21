@@ -10,6 +10,7 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+        
         <Maps:MapControl
        x:Name="MapControl1"            
        ZoomInteractionMode="GestureAndControl"
@@ -22,6 +23,7 @@
                         QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                         Width="320"
                         HorizontalAlignment="Center"/>
+            <Button x:Name="selfPositionButton" Content="Button" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,292,0,0" Click="selfPositionButton_click"/>
         </Maps:MapControl>
 
     </Grid>
