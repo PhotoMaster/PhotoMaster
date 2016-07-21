@@ -23,6 +23,7 @@ using Windows.UI.Core;
 using Windows.UI.Notifications;
 using System.Xml;
 using System.Diagnostics;
+using Windows.UI;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -69,6 +70,44 @@ namespace PhotoMaster
 
         }
 
+        private async void drawRoute(Geopoint start, Geopoint end, bool walk = true)
+        {
+            MapRouteFinderResult routeResult;
+            if (walk)
+            {
+                routeResult =
+                        await MapRouteFinder.GetWalkingRouteAsync(
+                            start,
+                            end);
+            }
+            else
+            {
+                routeResult =
+                        await MapRouteFinder.GetDrivingRouteAsync(
+                            start,
+                            end,
+                            MapRouteOptimization.Time,
+                            MapRouteRestrictions.None);
+            }
+            if (routeResult.Status == MapRouteFinderStatus.Success)
+            {
+                // Use the route to initialize a MapRouteView.
+                MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
+                viewOfRoute.RouteColor = Colors.Blue;
+                viewOfRoute.OutlineColor = Colors.Black;
+
+                // Add the new MapRouteView to the Routes collection
+                // of the MapControl.
+                MapControl1.Routes.Add(viewOfRoute);
+
+                // Fit the MapControl to the route.
+                await MapControl1.TrySetViewBoundsAsync(
+                      routeResult.Route.BoundingBox,
+                      null,
+                      Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
+            }
+        }
+
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             // Set your current location.
@@ -99,6 +138,14 @@ namespace PhotoMaster
                     selfLocationIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
                     selfLocationIcon.ZIndex = 0;
                     MapControl1.MapElements.Add(selfLocationIcon);
+
+
+                    BasicGeoposition startLocation = new BasicGeoposition() { Latitude = 39.9784, Longitude = 116.2749 };
+                    BasicGeoposition endLocation = new BasicGeoposition() { Latitude = 39.990712, Longitude = 116.27941 };
+                    drawRoute(new Geopoint(startLocation), new Geopoint(endLocation));
+
+
+
                     break;
 
                 case GeolocationAccessStatus.Denied:
