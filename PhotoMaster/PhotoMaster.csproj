@@ -140,7 +140,9 @@
     <Content Include="Assets\photos\008.jpg" />
     <Content Include="Assets\photos\009.jpg" />
     <Content Include="Assets\photos\010.jpg" />
+    <Content Include="Assets\photos\011-small.jpg" />
     <Content Include="Assets\photos\011.jpg" />
+    <Content Include="Assets\photos\012-small.jpg" />
     <Content Include="Assets\photos\012.jpg" />
     <Content Include="Assets\photos\013.jpg" />
     <Content Include="Assets\photos\014.jpg" />
@@ -161,6 +163,7 @@
     <Content Include="Assets\photos\037.jpg" />
     <Content Include="Assets\photos\038.jpg" />
     <Content Include="Assets\photos\039.jpg" />
+    <Content Include="Assets\photos\040-small.jpg" />
     <Content Include="Assets\photos\040.jpg" />
     <Content Include="Assets\photos\041.jpg" />
     <Content Include="Assets\photos\051.jpg" />
@@ -169,13 +172,16 @@
     <Content Include="Assets\photos\054.jpg" />
     <Content Include="Assets\photos\055.jpg" />
     <Content Include="Assets\photos\060.jpg" />
+    <Content Include="Assets\photos\061-small.jpg" />
     <Content Include="Assets\photos\061.jpg" />
+    <Content Include="Assets\photos\062-small.jpg" />
     <Content Include="Assets\photos\062.jpg" />
     <Content Include="Assets\photos\070.jpg" />
     <Content Include="Assets\photos\071.jpg" />
     <Content Include="Assets\photos\072.jpg" />
     <Content Include="Assets\photos\073.jpg" />
     <Content Include="Assets\photos\074.jpg" />
+    <Content Include="Assets\photos\075-small.jpg" />
     <Content Include="Assets\photos\075.jpg" />
     <Content Include="Assets\photos\076.jpg" />
     <Content Include="Properties\Default.rd.xml" />
