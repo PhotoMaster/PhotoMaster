@@ -37,7 +37,7 @@ namespace PhotoMaster
 
         private ObservableCollection<String> suggestions;
         private PhotoManager pm;
-        private MapIcon selfLocationIcon;
+        private MapIcon selfLocationIcon = new MapIcon();
         Geolocator geolocator;
 
         public MapPage()
@@ -50,6 +50,8 @@ namespace PhotoMaster
         private void displayPhotosPOI()
         {
             List<Photo> photos = pm.getPhotosToShow(MapControl1.Center, MapControl1.ZoomLevel);
+            MapControl1.MapElements.Clear();
+            MapControl1.MapElements.Add(selfLocationIcon);
             foreach (Photo photo in photos)
             {
                 BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
@@ -172,7 +174,7 @@ namespace PhotoMaster
                 MapIcon mapIcon = (MapIcon)(mapElement);
                 if (mapIcon == null) continue;
 
-                Photo photo = PhotoManager.GetInstance().GetPhotoByGPS(mapIcon.Location);
+                Photo photo = pm.GetPhotoByGPS(mapIcon.Location);
                 if(photo != null)
                 {
                     Frame root = Window.Current.Content as Frame;
@@ -257,6 +259,16 @@ namespace PhotoMaster
         {
             Geoposition pos = await geolocator.GetGeopositionAsync();
             MapControl1.Center = pos.Coordinate.Point;
+        }
+
+        private void MapControl1_ZoomLevelChanged(MapControl sender, object args)
+        {
+            displayPhotosPOI();
+        }
+
+        private void MapControl1_CenterChanged(MapControl sender, object args)
+        {
+            displayPhotosPOI();
         }
     }
 }

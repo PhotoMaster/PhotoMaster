@@ -16,7 +16,7 @@
        ZoomInteractionMode="GestureAndControl"
        TiltInteractionMode="GestureAndControl"   
        MapServiceToken="c738hgLNuZz9SPAgkEug~qPrqKcmS2q9L3RXdiszl_g~AqC52Z4FQ7nC59tTRNAzXw9DwY9sRMukTwSTIcBsq11580OgoNZZyTzhmSxDc0th"
-       MapTapped="OnMapTapped">
+       MapTapped="OnMapTapped" ZoomLevelChanged="MapControl1_ZoomLevelChanged" CenterChanged="MapControl1_CenterChanged">
             <AutoSuggestBox x:Name="autoSuggestBox"
                         TextChanged="AutoSuggestBox_TextChanged" 
                         QueryIcon="Find" 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace PhotoMaster.Model
 {
-    public class Photo
+    public class Photo:IComparer<Photo>
     {
         public int PhotoId;
         public BitmapImage PhotoImage;
@@ -40,6 +41,11 @@ namespace PhotoMaster.Model
                 PhotoDescription = des;
             }
             
+        }
+
+        public int Compare(Photo x, Photo y)
+        {
+            return Comparer.Default.Compare(x.PhotoScore, y.PhotoScore);
         }
     }
 }

@@ -12,14 +12,15 @@ namespace PhotoMaster
     public sealed class PhotoManager
     {
 
-        private static readonly PhotoManager instance = new PhotoManager();
+        private static PhotoManager instance = null;
 
-        private static readonly Db db = new Model.Db();
+        private Db db;
 
         private PhotoManager()
         {
+            db = Db.GetInstance();
             AllPhotos = new List<Photo>();
-            FakeDisplayData();
+            //FakeDisplayData();
         }
 
         private void FakeDisplayData()
@@ -51,12 +52,16 @@ namespace PhotoMaster
 
         public static PhotoManager GetInstance()
         {
+            if (instance == null)
+            {
+                instance = new PhotoManager();
+            }
             return instance;
         }
 
         public Photo GetPhotoByGPS(Geopoint pos)
         {
-            foreach(Photo photo in db.photos.Values)
+            foreach(Photo photo in db.photos)
             {
                 if (pos.Position.Equals(photo.PhotoGPS.Position))
                 {
@@ -78,19 +83,28 @@ namespace PhotoMaster
         {
             List<Photo> ret = new List<Photo>();
 
-            // TO DO
+
             // Return a list of photos shown in screen via map center and zoomLevel.
              // Should be set by zoomLevel
-            double range = 5.0;
-            foreach (Geopoint p in db.photos.Keys)
+            double range = 0.01;
+
+            foreach (Photo p in db.photos)
             {
-                if (p.Position.Latitude<center.Position.Latitude+ range && p.Position.Latitude > center.Position.Latitude - range 
-                    && p.Position.Longitude<center.Position.Longitude+ range && p.Position.Longitude > center.Position.Longitude - range)
+                if (p.PhotoGPS.Position.Latitude<center.Position.Latitude+ range && p.PhotoGPS.Position.Latitude > center.Position.Latitude - range 
+                    && p.PhotoGPS.Position.Longitude<center.Position.Longitude+ range && p.PhotoGPS.Position.Longitude > center.Position.Longitude - range)
                 {
-                    ret.Add(db.photos[p]);
+                    // We suppose db.photos have already been sorted by their score.
+                    if (ret.Count < 10)
+                    {
+                        ret.Add(p);
+                    }else
+                    {
+                        break;
+                    }
+                    
                 }
             }
-            //END
+
 
             return ret;
         }
