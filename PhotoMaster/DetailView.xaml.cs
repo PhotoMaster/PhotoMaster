@@ -26,6 +26,9 @@ namespace PhotoMaster
     {
         public DetailView()
         {
+            if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
             this.InitializeComponent();
         }
 
@@ -35,9 +38,30 @@ namespace PhotoMaster
 
             this.image.Source = m_photo.PhotoImage;
             this.detail.Text = m_photo.PhotoDescription;
+
+            if (m_photo.PhotoIsSelected)
+            {
+                checkBox.IsChecked = true;
+            }
         }
 
 
         private Photo m_photo;
+
+        private void checkBox_Checked(object sender, RoutedEventArgs e)
+        {
+            m_photo.PhotoIsSelected = true;
+        }
+
+        private void checkBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            m_photo.PhotoIsSelected = false;
+        }
+
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            var rootFrame = Window.Current.Content as Frame;
+            rootFrame.Navigate(typeof(MapPage),m_photo);
+        }
     }
 }

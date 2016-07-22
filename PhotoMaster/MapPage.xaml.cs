@@ -39,21 +39,42 @@ namespace PhotoMaster
         private ObservableCollection<String> suggestions;
         private PhotoManager pm;
         private MapIcon selfLocationIcon = new MapIcon();
-        Geolocator geolocator;
+        private Geolocator geolocator;
+        private bool isFirst;
+        private List<Photo> photosToShow;
+        private Dictionary<Photo,MapRouteView> checkedPhotos;
 
         public MapPage()
         {
             suggestions = new ObservableCollection<string>();
             pm = PhotoManager.GetInstance();
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Enabled;
+            photosToShow = new List<Photo>();
+            checkedPhotos = new Dictionary<Photo, MapRouteView>();
+            isFirst = true;
         }
 
         private void displayPhotosPOI()
         {
-            List<Photo> photos = pm.getPhotosToShow(MapControl1.Center, MapControl1.ZoomLevel);
+            photosToShow = pm.getPhotosToShow(MapControl1.Center, MapControl1.ZoomLevel);
             MapControl1.MapElements.Clear();
             MapControl1.MapElements.Add(selfLocationIcon);
-            foreach (Photo photo in photos)
+            foreach (Photo photo in photosToShow)
+            {
+                BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
+                Geopoint location = new Geopoint(iconPosition);
+                // Create a MapIcon.
+                MapIcon mapIcon1 = new MapIcon();
+                mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoUri));
+                mapIcon1.Location = location;
+                mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                mapIcon1.ZIndex = 0;
+
+                // Add the MapIcon to the map.
+                MapControl1.MapElements.Add(mapIcon1);
+            }
+             foreach (Photo photo in checkedPhotos.Keys)
             {
                 BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
                 Geopoint location = new Geopoint(iconPosition);
@@ -70,103 +91,123 @@ namespace PhotoMaster
 
         }
 
-        private async void drawRoute(Geopoint start, Geopoint end, bool walk = true)
+        private async void drawRoute()
         {
+            MapControl1.Routes.Clear();
+            foreach(KeyValuePair<Photo,MapRouteView> p in checkedPhotos)
+            {
+                MapControl1.Routes.Add(p.Value);
+            }
+        }
+
+        private async System.Threading.Tasks.Task<MapRouteView> findRoute(Photo photo, bool walk = true)
+        {
+            MapRouteView viewOfRoute = null;
             MapRouteFinderResult routeResult;
             if (walk)
             {
                 routeResult =
                         await MapRouteFinder.GetWalkingRouteAsync(
-                            start,
-                            end);
+                            selfLocationIcon.Location,
+                            photo.PhotoGPS);
             }
             else
             {
                 routeResult =
                         await MapRouteFinder.GetDrivingRouteAsync(
-                            start,
-                            end,
+                            selfLocationIcon.Location,
+                            photo.PhotoGPS,
                             MapRouteOptimization.Time,
                             MapRouteRestrictions.None);
             }
             if (routeResult.Status == MapRouteFinderStatus.Success)
             {
                 // Use the route to initialize a MapRouteView.
-                MapRouteView viewOfRoute = new MapRouteView(routeResult.Route);
+                viewOfRoute = new MapRouteView(routeResult.Route);
                 viewOfRoute.RouteColor = Colors.Blue;
                 viewOfRoute.OutlineColor = Colors.Black;
-
-                // Add the new MapRouteView to the Routes collection
-                // of the MapControl.
-                MapControl1.Routes.Add(viewOfRoute);
-
-                // Fit the MapControl to the route.
-                await MapControl1.TrySetViewBoundsAsync(
-                      routeResult.Route.BoundingBox,
-                      null,
-                      Windows.UI.Xaml.Controls.Maps.MapAnimationKind.None);
             }
+
+            return viewOfRoute;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            // Set your current location.
-            var accessStatus = await Geolocator.RequestAccessAsync();
-            BasicGeoposition cityPosition = new BasicGeoposition() { Latitude = 39, Longitude = 116 };
-            Geopoint cityCenter = new Geopoint(cityPosition);
-            switch (accessStatus)
+            if (isFirst)
             {
-                case GeolocationAccessStatus.Allowed:
+                // Set your current location.
+                var accessStatus = await Geolocator.RequestAccessAsync();
+                BasicGeoposition cityPosition = new BasicGeoposition() { Latitude = 39, Longitude = 116 };
+                Geopoint cityCenter = new Geopoint(cityPosition);
+                switch (accessStatus)
+                {
+                    case GeolocationAccessStatus.Allowed:
 
-                    // Get the current location.
-                    geolocator = new Geolocator { ReportInterval = 2000 };
-                    // Subscribe to the PositionChanged event to get location updates.
-                    geolocator.PositionChanged += OnPositionChanged;
+                        // Get the current location.
+                        geolocator = new Geolocator { ReportInterval = 2000 };
+                        // Subscribe to the PositionChanged event to get location updates.
+                        geolocator.PositionChanged += OnPositionChanged;
 
-                    // Subscribe to StatusChanged event to get updates of location status changes.
-                    geolocator.StatusChanged += OnStatusChanged;
-                    Geoposition pos = await geolocator.GetGeopositionAsync();
-                    cityCenter = pos.Coordinate.Point;
+                        // Subscribe to StatusChanged event to get updates of location status changes.
+                        geolocator.StatusChanged += OnStatusChanged;
+                        Geoposition pos = await geolocator.GetGeopositionAsync();
+                        cityCenter = pos.Coordinate.Point;
 
-                    // Set the map location.
-                    MapControl1.Center = cityCenter;
-                    MapControl1.ZoomLevel = 14;
-                    MapControl1.LandmarksVisible = true;
+                        // Set the map location.
+                        MapControl1.Center = cityCenter;
+                        MapControl1.ZoomLevel = 14;
+                        MapControl1.LandmarksVisible = true;
 
-                    selfLocationIcon = new MapIcon();
-                    selfLocationIcon.Location = cityCenter;
-                    selfLocationIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                    selfLocationIcon.ZIndex = 0;
-                    MapControl1.MapElements.Add(selfLocationIcon);
+                        selfLocationIcon = new MapIcon();
+                        selfLocationIcon.Location = cityCenter;
+                        selfLocationIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                        selfLocationIcon.ZIndex = 0;
+                        MapControl1.MapElements.Add(selfLocationIcon);
 
+                        displayPhotosPOI();
 
-                    BasicGeoposition startLocation = new BasicGeoposition() { Latitude = 39.9784, Longitude = 116.2749 };
-                    BasicGeoposition endLocation = new BasicGeoposition() { Latitude = 39.990712, Longitude = 116.27941 };
-                    drawRoute(new Geopoint(startLocation), new Geopoint(endLocation));
+                        break;
 
+                    case GeolocationAccessStatus.Denied:
+                        // Handle the case  if access to location is denied.
+                        // Set the map location.
+                        MapControl1.Center = cityCenter;
+                        MapControl1.ZoomLevel = 14;
+                        MapControl1.LandmarksVisible = true;
+                        break;
 
-
-                    break;
-
-                case GeolocationAccessStatus.Denied:
-                    // Handle the case  if access to location is denied.
-                    // Set the map location.
-                    MapControl1.Center = cityCenter;
-                    MapControl1.ZoomLevel = 14;
-                    MapControl1.LandmarksVisible = true;
-                    break;
-
-                case GeolocationAccessStatus.Unspecified:
-                    // Handle the case if  an unspecified error occurs.
-                    // Set the map location.
-                    MapControl1.Center = cityCenter;
-                    MapControl1.ZoomLevel = 14;
-                    MapControl1.LandmarksVisible = true;
-                    break;
+                    case GeolocationAccessStatus.Unspecified:
+                        // Handle the case if  an unspecified error occurs.
+                        // Set the map location.
+                        MapControl1.Center = cityCenter;
+                        MapControl1.ZoomLevel = 14;
+                        MapControl1.LandmarksVisible = true;
+                        break;
+                }
+                isFirst = false;
+            }else
+            {
+                Photo photoFromDetail = (Photo)e.Parameter;
+                if (photoFromDetail != null)
+                {
+                    if (checkedPhotos.ContainsKey(photoFromDetail))
+                    {
+                        if (!photoFromDetail.PhotoIsSelected)
+                        {
+                            checkedPhotos.Remove(photoFromDetail);
+                        }
+                    }else
+                    {
+                        if (photoFromDetail.PhotoIsSelected)
+                        {
+                            MapRouteView mrv = await findRoute(photoFromDetail);
+                            checkedPhotos.Add(photoFromDetail, mrv);
+                        }
+                    }
+                }
+                drawRoute();
             }
-
-            displayPhotosPOI();
-
+            
         }
 
 
@@ -214,22 +255,41 @@ namespace PhotoMaster
 
         private void OnMapTapped(MapControl sender, MapInputEventArgs args)
         {
-            IReadOnlyList<MapElement> mapElements = MapControl1.FindMapElementsAtOffset(args.Position);
+            //IReadOnlyList<MapElement> mapElements = MapControl1.FindMapElementsAtOffset(args.Position);
 
-            foreach (MapElement mapElement in mapElements)
-            {
-                MapIcon mapIcon = (MapIcon)(mapElement);
-                if (mapIcon == null) continue;
+            //foreach (MapElement mapElement in mapElements)
+            //{
+            //    MapIcon mapIcon = (MapIcon)(mapElement);
+            //    if (mapIcon == null) continue;
+            //    Photo photo = null;
+            //    foreach (Photo p in checkedPhotos)
+            //    {
+            //        if (p.PhotoGPS == mapIcon.Location)
+            //        {
+            //            photo = p;
+            //            break;
+            //        }
+            //    }
+            //    if (photo == null)
+            //    {
+            //        foreach (Photo p in photosToShow)
+            //        {
+            //            if (p.PhotoGPS == mapIcon.Location)
+            //            {
+            //                photo = p;
+            //                break;
+            //            }
+            //        }
+            //    }
 
-                Photo photo = pm.GetPhotoByGPS(mapIcon.Location);
-                if(photo != null)
-                {
-                    Frame root = Window.Current.Content as Frame;
-                    root.Navigate(typeof(DetailView), photo);
-                }
+            //    if(photo != null)
+            //    {
+            //        Frame root = Window.Current.Content as Frame;
+            //        root.Navigate(typeof(DetailView), photo);
+            //    }
                 
-                return;
-            }
+            //    return;
+            //}
         }
 
 
@@ -316,6 +376,45 @@ namespace PhotoMaster
         private void MapControl1_CenterChanged(MapControl sender, object args)
         {
             displayPhotosPOI();
+        }
+
+        private void MapControl1_MapElementClick(MapControl sender, MapElementClickEventArgs args)
+        {
+            IList<MapElement> mapElements = args.MapElements;
+
+            foreach (MapElement mapElement in mapElements)
+            {
+                MapIcon mapIcon = (MapIcon)(mapElement);
+                if (mapIcon == null) continue;
+                Photo photo = null;
+                foreach (Photo p in checkedPhotos.Keys)
+                {
+                    if (p.PhotoGPS.Position.Equals(mapIcon.Location.Position))
+                    {
+                        photo = p;
+                        break;
+                    }
+                }
+                if (photo == null)
+                {
+                    foreach (Photo p in photosToShow)
+                    {
+                        if (p.PhotoGPS.Position.Equals(mapIcon.Location.Position))
+                        {
+                            photo = p;
+                            break;
+                        }
+                    }
+                }
+
+                if (photo != null)
+                {
+                    Frame root = Window.Current.Content as Frame;
+                    root.Navigate(typeof(DetailView), photo);
+                }
+
+                return;
+            }
         }
     }
 }
