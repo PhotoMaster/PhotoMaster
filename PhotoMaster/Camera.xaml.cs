@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PhotoMaster.Model;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +25,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Devices.Geolocation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -58,6 +61,9 @@ namespace PhotoMaster
         // Information about the camera device
         private bool _mirroringPreview;
         private bool _externalCamera;
+
+        private Photo m_photo;
+        private PhotoManager pm = PhotoManager.GetInstance();
 
         #region Constructor, lifecycle and navigation
 
@@ -101,6 +107,8 @@ namespace PhotoMaster
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            m_photo = (Photo)e.Parameter;
+
             await SetupUiAsync();
 
             await InitializeCameraAsync();
@@ -503,6 +511,8 @@ namespace PhotoMaster
                 _mediaCapture.Dispose();
                 _mediaCapture = null;
             }
+
+            m_photo = null;
         }
 
         #endregion MediaCapture methods
@@ -532,7 +542,49 @@ namespace PhotoMaster
                 _deviceOrientation = _orientationSensor.GetCurrentOrientation();
             }
 
+            if (m_photo != null)
+            {
+                mainPic.Source = m_photo.PhotoImage;
+                List<Photo> photo_list = pm.GetPhotoListByGPSArea(m_photo.PhotoGPS);
+                image1.Source = m_photo.PhotoImage;
+                if (photo_list.Contains(m_photo))
+                {
+                    photo_list.Remove(m_photo);
+                }
+                image2.Source = photo_list[0].PhotoImage;
+                image3.Source = photo_list[1].PhotoImage;
+                image4.Source = photo_list[2].PhotoImage;
+
+            }
+            else
+            {
+                Geopoint self_location = await getSelfLocation();
+                if (self_location != null)
+                {
+                    List<Photo> photo_list = pm.GetPhotoListByGPSArea(self_location);
+                    mainPic.Source = photo_list[0].PhotoImage;
+                    image1.Source = photo_list[0].PhotoImage;
+                    image2.Source = photo_list[1].PhotoImage;
+                    image3.Source = photo_list[2].PhotoImage;
+                    image4.Source = photo_list[3].PhotoImage;
+                }
+
+            }
+
             RegisterEventHandlers();
+        }
+
+        private async Task<Geopoint> getSelfLocation()
+        {
+            Geopoint ret=null;
+            var accessStatus = await Geolocator.RequestAccessAsync();
+            if (accessStatus == GeolocationAccessStatus.Allowed)
+            {
+                Geolocator geolocator = new Geolocator();
+                Geoposition pos = await geolocator.GetGeopositionAsync();
+                ret = pos.Coordinate.Point;
+            }
+            return ret;
         }
 
         /// <summary>

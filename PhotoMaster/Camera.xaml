@@ -36,10 +36,10 @@
                 </Style>
             </StackPanel.Resources>
             <StackPanel Name="photoModels">
-                <Image Source="Assets/demo1.jpg" Tapped="ChangePhoto"/>
-                <Image Source="Assets/demo2.jpg" Tapped="ChangePhoto"/>
-                <Image Source="Assets/demo3.jpg" Tapped="ChangePhoto"/>
-                <Image Source="Assets/demo1.jpg" Tapped="ChangePhoto"/>
+                <Image x:Name="image1" Tapped="ChangePhoto"/>
+                <Image x:Name="image2" Tapped="ChangePhoto"/>
+                <Image x:Name="image3" Tapped="ChangePhoto"/>
+                <Image x:Name="image4" Tapped="ChangePhoto"/>
             </StackPanel>
             <Button Name="PhotoButton" Tapped="PhotoButton_Tapped" VerticalAlignment="Center" IsEnabled="True" Visibility="Collapsed" >
                 <Viewbox MaxHeight="40" MaxWidth="40">

@@ -11,10 +11,11 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <!--<TextBlock Height="30" Margin="29,31,178,0" TextWrapping="Wrap" Text="Photo Details" VerticalAlignment="Top" FontSize="21.333"/>-->
         <Image x:Name="image" Margin="29,100,39,191"/>
-        <TextBlock x:Name="detail" Height="126" Margin="29,0,39,40" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom"/>
+        <TextBlock x:Name="detail" Height="106" Margin="29,0,39,60" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom"/>
         <Image x:Name="image1" HorizontalAlignment="Left" Margin="10,261,0,288" Width="86" Source="Assets/arrow-left.gif"/>
         <Image x:Name="image1_Copy" HorizontalAlignment="Right" Margin="0,261,10,288" Width="86" Source="Assets/arrow-right.gif"/>
         <CheckBox x:Name="checkBox" Content="CheckBox" HorizontalAlignment="Stretch" Margin="29,5,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked"/>
+        <Button x:Name="button" Content="Take Photo" HorizontalAlignment="Center" Margin="257,5,10,0" VerticalAlignment="Top" RenderTransformOrigin="-0.434,1.198" Click="button_Click"/>
 
     </Grid>
 </Page>

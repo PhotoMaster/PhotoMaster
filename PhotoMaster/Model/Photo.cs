@@ -49,5 +49,16 @@ namespace PhotoMaster.Model
         {
             return Comparer.Default.Compare(x.PhotoScore, y.PhotoScore);
         }
+
+        public bool Equals(Photo x)
+        {
+            bool ret = false;
+            if (x.PhotoId == this.PhotoId)
+            {
+                ret = true;
+            }
+            return ret;
+        }
+
     }
 }

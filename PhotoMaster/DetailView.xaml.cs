@@ -64,5 +64,11 @@ namespace PhotoMaster
             rootFrame.Navigate(typeof(MapPage),m_photo);
             e.Handled = true;
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            var rootFrame = Window.Current.Content as Frame;
+            rootFrame.Navigate(typeof(Camera), m_photo);
+        }
     }
 }

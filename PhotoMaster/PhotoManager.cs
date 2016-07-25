@@ -19,35 +19,7 @@ namespace PhotoMaster
         private PhotoManager()
         {
             db = Db.GetInstance();
-            AllPhotos = new List<Photo>();
             //FakeDisplayData();
-        }
-
-        private void FakeDisplayData()
-        {
-            Photo photo = new Photo();
-            photo.PhotoImage = new BitmapImage(new Uri("ms-appx:/Assets/demo1.jpg"));
-            photo.PhotoDescription = "This image is a test image, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-            BasicGeoposition position = new BasicGeoposition() { Latitude = 39.992239, Longitude = 116.272634 };
-            photo.PhotoGPS = new Geopoint(position);
-            AllPhotos.Add(photo);
-
-            photo = new Photo();
-            photo.PhotoImage = new BitmapImage(new Uri("ms-appx:/Assets/demo2.jpg"));
-            photo.PhotoDescription = "This image is a test image, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-            position = new BasicGeoposition() { Latitude = 39.991056, Longitude = 116.275938 };
-            photo.PhotoGPS = new Geopoint(position);
-            AllPhotos.Add(photo);
-
-            photo = new Photo();
-            photo.PhotoImage = new BitmapImage(new Uri("ms-appx:/Assets/demo3.jpg"));
-            photo.PhotoDescription = "This image is a test image, XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
-
-            position = new BasicGeoposition() { Latitude = 39.990201, Longitude = 116.278213 };
-            photo.PhotoGPS = new Geopoint(position);
-            AllPhotos.Add(photo);
         }
 
         public static PhotoManager GetInstance()
@@ -74,10 +46,35 @@ namespace PhotoMaster
 
         public List<Photo> GetPhotoListByGPSArea(Geopoint pos)
         {
-            return AllPhotos;
-        }
+            List<Photo> ret = new List<Photo>();
+            
+            double range = 0.01;
 
-        private List<Photo> AllPhotos;
+            foreach (Photo p in db.photos)
+            {
+                if (p.PhotoGPS.Position.Latitude < pos.Position.Latitude + range && p.PhotoGPS.Position.Latitude > pos.Position.Latitude - range
+                    && p.PhotoGPS.Position.Longitude < pos.Position.Longitude + range && p.PhotoGPS.Position.Longitude > pos.Position.Longitude - range)
+                {
+                    // We suppose db.photos have already been sorted by their score.
+                    if (ret.Count < 4)
+                    {
+                        ret.Add(p);
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }
+            }
+            Photo tmp = new Photo();
+            while (ret.Count < 4)
+            {
+                ret.Add(tmp);
+            }
+
+            return ret;
+        }
 
         public List<Photo> getPhotosToShow(Geopoint center, double zoomLevel)
         {
