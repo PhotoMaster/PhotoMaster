@@ -179,9 +179,7 @@
             <AutoSuggestBox x:Name="autoSuggestBox"
                         TextChanged="AutoSuggestBox_TextChanged" 
                         QueryIcon="Find" 
-                        QuerySubmitted="AutoSuggestBox_QuerySubmitted"
-                        Width="320"
-                        HorizontalAlignment="Center"/>
+                        QuerySubmitted="AutoSuggestBox_QuerySubmitted" Width="360"/>
             <Button x:Name="selfPositionButton" Content="Button" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,292,0,0" Click="selfPositionButton_click"/>
         </Maps:MapControl>
         <Rectangle Height="50" Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,2,0,2" Fill="#33E0D6D6" />

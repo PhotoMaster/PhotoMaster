@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Windows.Phone.UI.Input;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -29,8 +30,21 @@ namespace PhotoMaster
             this.InitializeComponent();
         }
 
+        private void HardwareButtons_BackPressed(object sender, BackPressedEventArgs e)
+        {
+            Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+
+            var rootFrame = Window.Current.Content as Frame;
+            rootFrame.Navigate(typeof(MapPage), m_photo);
+            Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+            Frame.BackStack.RemoveAt(Frame.BackStack.Count - 1);
+            e.Handled = true;
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
             m_photo = (Photo)e.Parameter;
 
             this.image.Source = m_photo.PhotoImage;
@@ -41,7 +55,6 @@ namespace PhotoMaster
                 checkBox.IsChecked = true;
             }
         }
-
 
         private Photo m_photo;
 
