@@ -76,9 +76,9 @@ namespace PhotoMaster
             return ret;
         }
 
-        public List<Photo> getPhotosToShow(Geopoint center, double zoomLevel)
+        public Dictionary<Photo,bool> getPhotosToShow(Geopoint center, double zoomLevel)
         {
-            List<Photo> ret = new List<Photo>();
+            Dictionary<Photo, bool> ret = new Dictionary<Photo, bool>();
 
 
             // Return a list of photos shown in screen via map center and zoomLevel.
@@ -93,7 +93,7 @@ namespace PhotoMaster
                     // We suppose db.photos have already been sorted by their score.
                     if (ret.Count < 10)
                     {
-                        ret.Add(p);
+                        ret.Add(p,false);
                     }else
                     {
                         break;

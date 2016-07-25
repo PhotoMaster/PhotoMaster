@@ -35,8 +35,8 @@ namespace PhotoMaster
         private MapIcon selfLocationIcon = new MapIcon();
         private Geolocator geolocator;
         private bool isFirst;
-        private List<Photo> photosToShow;
-        private List<Photo> checkedPhotos;
+        private Dictionary<Photo,bool> photosToShow;
+        private Dictionary<Photo,bool> checkedPhotos;
         private bool isWalkAroundModeEnabled = false;
         private bool shouldShowNotification = true;
 
@@ -46,8 +46,8 @@ namespace PhotoMaster
             pm = PhotoManager.GetInstance();
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
-            photosToShow = new List<Photo>();
-            checkedPhotos = new List<Photo>();
+            photosToShow = new Dictionary<Photo, bool>();
+            checkedPhotos = new Dictionary<Photo, bool>();
             isFirst = true;
         }
 
@@ -56,7 +56,7 @@ namespace PhotoMaster
             photosToShow = pm.getPhotosToShow(MapControl1.Center, MapControl1.ZoomLevel);
             MapControl1.MapElements.Clear();
             MapControl1.MapElements.Add(selfLocationIcon);
-            foreach (Photo photo in photosToShow)
+            foreach (Photo photo in photosToShow.Keys)
             {
                 BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
                 Geopoint location = new Geopoint(iconPosition);
@@ -78,7 +78,7 @@ namespace PhotoMaster
                 // Add the MapIcon to the map.
                 MapControl1.MapElements.Add(mapIcon1);
             }
-             foreach (Photo photo in checkedPhotos)
+             foreach (Photo photo in checkedPhotos.Keys)
             {
                 BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
                 Geopoint location = new Geopoint(iconPosition);
@@ -107,7 +107,7 @@ namespace PhotoMaster
             MapControl1.Routes.Clear();
             Geopoint start = selfLocationIcon.Location;
 
-            foreach(Photo p in checkedPhotos.ToList())
+            foreach(Photo p in checkedPhotos.Keys.ToList())
             {
                 MapRouteView mrv = await findRoute(start, p.PhotoGPS);
                 MapControl1.Routes.Add(mrv);
@@ -206,7 +206,7 @@ namespace PhotoMaster
                 Photo photoFromDetail = (Photo)e.Parameter;
                 if (photoFromDetail != null)
                 {
-                    if (checkedPhotos.Contains(photoFromDetail))
+                    if (checkedPhotos.ContainsKey(photoFromDetail))
                     {
                         if (!photoFromDetail.PhotoIsSelected)
                         {
@@ -216,7 +216,7 @@ namespace PhotoMaster
                     {
                         if (photoFromDetail.PhotoIsSelected)
                         {
-                            checkedPhotos.Add(photoFromDetail);
+                            checkedPhotos.Add(photoFromDetail,false);
                         }
                     }
                 }
@@ -273,41 +273,7 @@ namespace PhotoMaster
 
         private void OnMapTapped(MapControl sender, MapInputEventArgs args)
         {
-            //IReadOnlyList<MapElement> mapElements = MapControl1.FindMapElementsAtOffset(args.Position);
 
-            //foreach (MapElement mapElement in mapElements)
-            //{
-            //    MapIcon mapIcon = (MapIcon)(mapElement);
-            //    if (mapIcon == null) continue;
-            //    Photo photo = null;
-            //    foreach (Photo p in checkedPhotos)
-            //    {
-            //        if (p.PhotoGPS == mapIcon.Location)
-            //        {
-            //            photo = p;
-            //            break;
-            //        }
-            //    }
-            //    if (photo == null)
-            //    {
-            //        foreach (Photo p in photosToShow)
-            //        {
-            //            if (p.PhotoGPS == mapIcon.Location)
-            //            {
-            //                photo = p;
-            //                break;
-            //            }
-            //        }
-            //    }
-
-            //    if(photo != null)
-            //    {
-            //        Frame root = Window.Current.Content as Frame;
-            //        root.Navigate(typeof(DetailView), photo);
-            //    }
-                
-            //    return;
-            //}
         }
 
 
@@ -377,6 +343,53 @@ namespace PhotoMaster
                 Geopoint location = new Geopoint(iconPosition);
                 selfLocationIcon.Location = location;
 
+                if (isWalkAroundModeEnabled)
+                {
+                    double range = 0.001;
+                    bool hasReminded = false;
+                    foreach (Photo p in checkedPhotos.Keys)
+                    {
+                        if (p.PhotoGPS.Position.Latitude < e.Position.Coordinate.Point.Position.Latitude + range && p.PhotoGPS.Position.Latitude > e.Position.Coordinate.Point.Position.Latitude - range
+                        && p.PhotoGPS.Position.Longitude < e.Position.Coordinate.Point.Position.Longitude + range && p.PhotoGPS.Position.Longitude > e.Position.Coordinate.Point.Position.Longitude - range)
+                        {
+                            if (!checkedPhotos[p])
+                            {
+                                if (!hasReminded)
+                                {
+                                    Debug.WriteLine("Enteredd");
+                                    hasReminded = true;
+                                }
+                                checkedPhotos[p] = true;
+                            }
+                        }
+                        else
+                        {
+                            checkedPhotos[p] = false;
+                        }
+                    }
+
+                    foreach (Photo p in photosToShow.Keys.ToList())
+                    {
+                        if (p.PhotoGPS.Position.Latitude < e.Position.Coordinate.Point.Position.Latitude + range && p.PhotoGPS.Position.Latitude > e.Position.Coordinate.Point.Position.Latitude - range
+                        && p.PhotoGPS.Position.Longitude < e.Position.Coordinate.Point.Position.Longitude + range && p.PhotoGPS.Position.Longitude > e.Position.Coordinate.Point.Position.Longitude - range)
+                        {
+                            if (!photosToShow[p])
+                            {
+                                if (!hasReminded)
+                                {
+                                    Debug.WriteLine("Enteredd");
+                                    hasReminded = true;
+                                }
+                                photosToShow[p] = true;
+                            }
+                        }
+                        else
+                        {
+                            photosToShow[p] = false;
+                        }
+                    }
+                }
+
             });
         }
 
@@ -407,7 +420,7 @@ namespace PhotoMaster
                 MapIcon mapIcon = (MapIcon)(mapElement);
                 if (mapIcon == null) continue;
                 Photo photo = null;
-                foreach (Photo p in checkedPhotos)
+                foreach (Photo p in checkedPhotos.Keys)
                 {
                     if (p.PhotoGPS.Position.Equals(mapIcon.Location.Position))
                     {
@@ -417,7 +430,7 @@ namespace PhotoMaster
                 }
                 if (photo == null)
                 {
-                    foreach (Photo p in photosToShow)
+                    foreach (Photo p in photosToShow.Keys)
                     {
                         if (p.PhotoGPS.Position.Equals(mapIcon.Location.Position))
                         {
