@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Core;
 using System.Diagnostics;
 using Windows.UI;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -36,6 +37,8 @@ namespace PhotoMaster
         private bool isFirst;
         private List<Photo> photosToShow;
         private List<Photo> checkedPhotos;
+        private bool isWalkAroundModeEnabled = false;
+        private bool shouldShowNotification = true;
 
         public MapPage()
         {
@@ -441,6 +444,42 @@ namespace PhotoMaster
             var rootFrame = Window.Current.Content as Frame;
             rootFrame.Navigate(typeof(MainPage));
             e.Handled = true;
+        }
+
+        private async void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var messageDialog = new MessageDialog("You can go around while Cortana will remind you when you get close to a beautiful & nice to take a photo place.",
+                "Walk Around Mode:");
+
+            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+            messageDialog.Commands.Add(new UICommand(
+                "Don't show again",
+                new UICommandInvokedHandler(this.CommandInvokedHandler)));
+            messageDialog.Commands.Add(new UICommand(
+                "Close",
+                new UICommandInvokedHandler(this.CommandInvokedHandler)));
+
+            // Set the command that will be invoked by default
+            messageDialog.DefaultCommandIndex = 0;
+
+            // Set the command to be invoked when escape is pressed
+            messageDialog.CancelCommandIndex = 1;
+
+            await messageDialog.ShowAsync();
+        }
+
+        private void CommandInvokedHandler(IUICommand command)
+        {
+            isWalkAroundModeEnabled = true;
+
+            if (command.Label == "Don't show again")
+            {
+                shouldShowNotification = false;
+            }
+            else
+            {
+                shouldShowNotification = true;
+            }
         }
     }
 }
