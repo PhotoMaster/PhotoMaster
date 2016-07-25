@@ -185,5 +185,6 @@
             <Button x:Name="selfPositionButton" Content="Button" Height="30" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,292,0,0" Click="selfPositionButton_click"/>
         </Maps:MapControl>
         <Rectangle Height="50" Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,2,0,2" Fill="#33E0D6D6" />
+        <CheckBox Content="Walk Around" Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,2,0,2" FontSize="32" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Style="{StaticResource CheckBoxStyle1}" Checked="CheckBox_Checked" />
     </Grid>
 </Page>
