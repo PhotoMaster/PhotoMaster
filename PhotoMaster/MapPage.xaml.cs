@@ -69,7 +69,15 @@ namespace PhotoMaster
                 Geopoint location = new Geopoint(iconPosition);
                 // Create a MapIcon.
                 MapIcon mapIcon1 = new MapIcon();
-                mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoUri));
+                if(photo.PhotoIsSelected)
+                {
+                    mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoCheckedUri));
+                }
+                else
+                {
+                    mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoUri));
+                }
+
                 mapIcon1.Location = location;
                 mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
                 mapIcon1.ZIndex = 0;
@@ -83,7 +91,14 @@ namespace PhotoMaster
                 Geopoint location = new Geopoint(iconPosition);
                 // Create a MapIcon.
                 MapIcon mapIcon1 = new MapIcon();
-                mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoUri));
+                if (photo.PhotoIsSelected)
+                {
+                    mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoCheckedUri));
+                }
+                else
+                {
+                    mapIcon1.Image = RandomAccessStreamReference.CreateFromUri(new Uri(photo.PhotoUri));
+                }
                 mapIcon1.Location = location;
                 mapIcon1.NormalizedAnchorPoint = new Point(0.5, 1.0);
                 mapIcon1.ZIndex = 0;
@@ -212,6 +227,9 @@ namespace PhotoMaster
                         }
                     }
                 }
+
+                MapControl1.MapElements.Clear(); ;
+                displayPhotosPOI();
                 drawRoute();
             }
             

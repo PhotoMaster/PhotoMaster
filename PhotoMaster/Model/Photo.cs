@@ -18,16 +18,18 @@ namespace PhotoMaster.Model
         public bool PhotoIsSelected;
         public double PhotoScore;
         public string PhotoUri;
+        public string PhotoCheckedUri;
 
         public Photo()
         {
 
         }
 
-        public Photo(int id, BitmapImage image, Geopoint gps, double score, string uri, String des = null)
+        public Photo(int id, BitmapImage image, Geopoint gps, double score, string uri, string checkedUri, String des = null)
         {
             PhotoId = id;
             PhotoUri = uri;
+            PhotoCheckedUri = checkedUri;
             PhotoImage = image;
             PhotoGPS = gps;
             PhotoIsSelected = false;
