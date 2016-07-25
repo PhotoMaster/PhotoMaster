@@ -484,5 +484,10 @@ namespace PhotoMaster
                 shouldShowNotification = true;
             }
         }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            isWalkAroundModeEnabled = false;
+        }
     }
 }
