@@ -448,30 +448,33 @@ namespace PhotoMaster
 
         private async void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            var messageDialog = new MessageDialog("You can go around while Cortana will remind you when you get close to a beautiful & nice to take a photo place.",
-                "Walk Around Mode:");
+            isWalkAroundModeEnabled = true;
 
-            // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
-            messageDialog.Commands.Add(new UICommand(
-                "Don't show again",
-                new UICommandInvokedHandler(this.CommandInvokedHandler)));
-            messageDialog.Commands.Add(new UICommand(
-                "Close",
-                new UICommandInvokedHandler(this.CommandInvokedHandler)));
+            if (shouldShowNotification)
+            {
+                var messageDialog = new MessageDialog("You can go around while Cortana will remind you when you get close to a beautiful & nice to take a photo place.",
+                    "Walk Around Mode:");
 
-            // Set the command that will be invoked by default
-            messageDialog.DefaultCommandIndex = 0;
+                // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+                messageDialog.Commands.Add(new UICommand(
+                    "Don't show again",
+                    new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                messageDialog.Commands.Add(new UICommand(
+                    "Close",
+                    new UICommandInvokedHandler(this.CommandInvokedHandler)));
 
-            // Set the command to be invoked when escape is pressed
-            messageDialog.CancelCommandIndex = 1;
+                // Set the command that will be invoked by default
+                messageDialog.DefaultCommandIndex = 0;
 
-            await messageDialog.ShowAsync();
+                // Set the command to be invoked when escape is pressed
+                messageDialog.CancelCommandIndex = 1;
+
+                await messageDialog.ShowAsync();
+            }
         }
 
         private void CommandInvokedHandler(IUICommand command)
         {
-            isWalkAroundModeEnabled = true;
-
             if (command.Label == "Don't show again")
             {
                 shouldShowNotification = false;
