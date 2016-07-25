@@ -105,7 +105,6 @@ namespace PhotoMaster
                 }
             }
 
-
             return ret;
         }
         

@@ -33,12 +33,14 @@ namespace PhotoMaster
         {
             Frame root = Window.Current.Content as Frame;
             root.Navigate(typeof(MapPage));
+            e.Handled = true;
         }
 
         private void click_camera(object sender, TappedRoutedEventArgs e)
         {
             Frame root = Window.Current.Content as Frame;
             root.Navigate(typeof(Camera));
+            e.Handled = true;
         }
     }
 }

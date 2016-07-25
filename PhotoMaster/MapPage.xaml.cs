@@ -42,16 +42,19 @@ namespace PhotoMaster
         private Geolocator geolocator;
         private bool isFirst;
         private List<Photo> photosToShow;
-        private Dictionary<Photo,MapRouteView> checkedPhotos;
+        private List<Photo> checkedPhotos;
 
         public MapPage()
         {
+            if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+
             suggestions = new ObservableCollection<string>();
             pm = PhotoManager.GetInstance();
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
             photosToShow = new List<Photo>();
-            checkedPhotos = new Dictionary<Photo, MapRouteView>();
+            checkedPhotos = new List<Photo>();
             isFirst = true;
         }
 
@@ -74,7 +77,7 @@ namespace PhotoMaster
                 // Add the MapIcon to the map.
                 MapControl1.MapElements.Add(mapIcon1);
             }
-             foreach (Photo photo in checkedPhotos.Keys)
+             foreach (Photo photo in checkedPhotos)
             {
                 BasicGeoposition iconPosition = new BasicGeoposition() { Latitude = photo.PhotoGPS.Position.Latitude, Longitude = photo.PhotoGPS.Position.Longitude };
                 Geopoint location = new Geopoint(iconPosition);
@@ -94,13 +97,18 @@ namespace PhotoMaster
         private async void drawRoute()
         {
             MapControl1.Routes.Clear();
-            foreach(KeyValuePair<Photo,MapRouteView> p in checkedPhotos)
+            Geopoint start = selfLocationIcon.Location;
+
+            foreach(Photo p in checkedPhotos.ToList())
             {
-                MapControl1.Routes.Add(p.Value);
+                MapRouteView mrv = await findRoute(start, p.PhotoGPS);
+                MapControl1.Routes.Add(mrv);
+                start = p.PhotoGPS;
             }
+
         }
 
-        private async System.Threading.Tasks.Task<MapRouteView> findRoute(Photo photo, bool walk = true)
+        private async System.Threading.Tasks.Task<MapRouteView> findRoute(Geopoint start, Geopoint end, bool walk = true)
         {
             MapRouteView viewOfRoute = null;
             MapRouteFinderResult routeResult;
@@ -108,15 +116,15 @@ namespace PhotoMaster
             {
                 routeResult =
                         await MapRouteFinder.GetWalkingRouteAsync(
-                            selfLocationIcon.Location,
-                            photo.PhotoGPS);
+                            start,
+                            end);
             }
             else
             {
                 routeResult =
                         await MapRouteFinder.GetDrivingRouteAsync(
-                            selfLocationIcon.Location,
-                            photo.PhotoGPS,
+                            start,
+                            end,
                             MapRouteOptimization.Time,
                             MapRouteRestrictions.None);
             }
@@ -190,7 +198,7 @@ namespace PhotoMaster
                 Photo photoFromDetail = (Photo)e.Parameter;
                 if (photoFromDetail != null)
                 {
-                    if (checkedPhotos.ContainsKey(photoFromDetail))
+                    if (checkedPhotos.Contains(photoFromDetail))
                     {
                         if (!photoFromDetail.PhotoIsSelected)
                         {
@@ -200,8 +208,7 @@ namespace PhotoMaster
                     {
                         if (photoFromDetail.PhotoIsSelected)
                         {
-                            MapRouteView mrv = await findRoute(photoFromDetail);
-                            checkedPhotos.Add(photoFromDetail, mrv);
+                            checkedPhotos.Add(photoFromDetail);
                         }
                     }
                 }
@@ -371,11 +378,13 @@ namespace PhotoMaster
         private void MapControl1_ZoomLevelChanged(MapControl sender, object args)
         {
             displayPhotosPOI();
+            Debug.WriteLine(MapControl1.ZoomLevel);
         }
 
         private void MapControl1_CenterChanged(MapControl sender, object args)
         {
             displayPhotosPOI();
+            Debug.WriteLine(MapControl1.Center);
         }
 
         private void MapControl1_MapElementClick(MapControl sender, MapElementClickEventArgs args)
@@ -387,7 +396,7 @@ namespace PhotoMaster
                 MapIcon mapIcon = (MapIcon)(mapElement);
                 if (mapIcon == null) continue;
                 Photo photo = null;
-                foreach (Photo p in checkedPhotos.Keys)
+                foreach (Photo p in checkedPhotos)
                 {
                     if (p.PhotoGPS.Position.Equals(mapIcon.Location.Position))
                     {
@@ -415,6 +424,12 @@ namespace PhotoMaster
 
                 return;
             }
+        }
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            var rootFrame = Window.Current.Content as Frame;
+            rootFrame.Navigate(typeof(MainPage));
+            e.Handled = true;
         }
     }
 }

@@ -63,7 +63,7 @@ namespace PhotoMaster.Model
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/075.jpg"));
             position = new BasicGeoposition() { Latitude = 39.993428, Longitude = 116.267236 };
             gpsPoint = new Geopoint(position);
-            photo = new Photo(75, image, gpsPoint, 85, "ms-appx:/Assets/photos/075-small.jpg");
+            photo = new Photo(75, image, gpsPoint, 85, "ms-appx:///Assets/photos/075-small.jpg");
             photos.Add(photo);
 
         }

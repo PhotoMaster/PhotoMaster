@@ -28,8 +28,8 @@ namespace PhotoMaster
         /// </summary>
         public App()
         {
-            if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            //if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
+            //    Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
 
             this.InitializeComponent();
             this.Suspending += OnSuspending;
@@ -107,14 +107,14 @@ namespace PhotoMaster
         }
 
         
-        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        {
-            var rootFrame = Window.Current.Content as Frame;
-            if (rootFrame.CanGoBack)
-            {
-                rootFrame.GoBack();
-                e.Handled = true;
-            }
-        }
+        //private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        //{
+        //    var rootFrame = Window.Current.Content as Frame;
+        //    if (rootFrame.CanGoBack)
+        //    {
+        //        rootFrame.GoBack();
+        //        e.Handled = true;
+        //    }
+        //}
     }
 }
