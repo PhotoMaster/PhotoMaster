@@ -26,9 +26,6 @@ namespace PhotoMaster
     {
         public DetailView()
         {
-            if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
-
             this.InitializeComponent();
         }
 
@@ -56,13 +53,6 @@ namespace PhotoMaster
         private void checkBox_Unchecked(object sender, RoutedEventArgs e)
         {
             m_photo.PhotoIsSelected = false;
-        }
-
-        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        {
-            var rootFrame = Window.Current.Content as Frame;
-            rootFrame.Navigate(typeof(MapPage),m_photo);
-            e.Handled = true;
         }
 
         private void button_Click(object sender, RoutedEventArgs e)

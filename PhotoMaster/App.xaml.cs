@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -80,6 +81,8 @@ namespace PhotoMaster
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+            SystemNavigationManager.GetForCurrentView().BackRequested += App_BackRequested;
         }
 
         /// <summary>
@@ -106,15 +109,17 @@ namespace PhotoMaster
             deferral.Complete();
         }
 
-        
-        //private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        //{
-        //    var rootFrame = Window.Current.Content as Frame;
-        //    if (rootFrame.CanGoBack)
-        //    {
-        //        rootFrame.GoBack();
-        //        e.Handled = true;
-        //    }
-        //}
+        private void App_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            var rootFrame = Window.Current.Content as Frame;
+
+            if (rootFrame == null) return;
+
+            if (rootFrame.CanGoBack && e.Handled == false)
+            {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
+        }
     }
 }
