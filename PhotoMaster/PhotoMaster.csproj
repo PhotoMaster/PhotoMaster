@@ -206,6 +206,9 @@
     <Content Include="Assets\photos\075-small.jpg" />
     <Content Include="Assets\photos\075.jpg" />
     <Content Include="Assets\photos\076.jpg" />
+    <Content Include="Assets\photos\099-small-check.jpg" />
+    <Content Include="Assets\photos\099-small.jpg" />
+    <Content Include="Assets\photos\099.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

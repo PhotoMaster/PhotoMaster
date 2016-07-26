@@ -35,10 +35,10 @@ namespace PhotoMaster.Model
             photo = new Photo(18, image, gpsPoint, 94, "ms-appx:///Assets/photos/018-small.jpg", "ms-appx:///Assets/photos/018-small-check.jpg");
             photos.Add(photo);
 
-            image = new BitmapImage(new Uri("ms-appx:/Assets/photos/019.jpg"));
+            image = new BitmapImage(new Uri("ms-appx:/Assets/photos/099.jpg"));
             position = new BasicGeoposition() { Latitude = 39.998036, Longitude = 116.278949 };
             gpsPoint = new Geopoint(position);
-            photo = new Photo(19, image, gpsPoint, 93, "ms-appx:///Assets/photos/019-small.jpg", "ms-appx:///Assets/photos/019-small-check.jpg");
+            photo = new Photo(99, image, gpsPoint, 93, "ms-appx:///Assets/photos/099-small.jpg", "ms-appx:///Assets/photos/099-small-check.jpg");
             photos.Add(photo);
 
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/020.jpg"));
@@ -62,7 +62,7 @@ namespace PhotoMaster.Model
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/040.jpg"));
             position = new BasicGeoposition() { Latitude = 39.990712, Longitude = 116.27941 };
             gpsPoint = new Geopoint(position);
-            photo = new Photo(40, image, gpsPoint, 89, "ms-appx:///Assets/photos/040-small.jpg", "ms-appx:///Assets/photos/040-small-check.jpg");
+            photo = new Photo(40, image, gpsPoint, 89, "ms-appx:///Assets/photos/040-small.jpg", "ms-appx:///Assets/photos/040-small-check.jpg", "Summer bull located on the north banks of the profile, such as kiosks, when Emperor Qianlong which adorn this is the hope that it Wing Yau water town, long flood surrender to the garden and nearby people bring endless Xiangfu. To illustrate the significance of the construction of the bull, the emperor deliberately wrote a four - character inscription, with the body of the book of seal engraved on the front and the bull. Copper is the Summer Palace, Kunming Lake Cattle east shore of a unique landscape and art treasures.");
             photos.Add(photo);
 
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/060.jpg"));
