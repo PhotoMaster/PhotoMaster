@@ -56,7 +56,7 @@ namespace PhotoMaster
                     && p.PhotoGPS.Position.Longitude < pos.Position.Longitude + range && p.PhotoGPS.Position.Longitude > pos.Position.Longitude - range)
                 {
                     // We suppose db.photos have already been sorted by their score.
-                    if (ret.Count < 4)
+                    if (ret.Count < 5)
                     {
                         ret.Add(p);
                     }
@@ -68,7 +68,7 @@ namespace PhotoMaster
                 }
             }
             Photo tmp = new Photo();
-            while (ret.Count < 4)
+            while (ret.Count < 5)
             {
                 ret.Add(tmp);
             }
