@@ -554,6 +554,7 @@ namespace PhotoMaster
                 image2.Source = photo_list[0].PhotoImage;
                 image3.Source = photo_list[1].PhotoImage;
                 image4.Source = photo_list[2].PhotoImage;
+                image5.Source = photo_list[3].PhotoImage;
 
             }
             else
@@ -567,6 +568,7 @@ namespace PhotoMaster
                     image2.Source = photo_list[1].PhotoImage;
                     image3.Source = photo_list[2].PhotoImage;
                     image4.Source = photo_list[3].PhotoImage;
+                    image5.Source = photo_list[4].PhotoImage;
                 }
 
             }

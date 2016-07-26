@@ -40,6 +40,7 @@
                 <Image x:Name="image2" Tapped="ChangePhoto"/>
                 <Image x:Name="image3" Tapped="ChangePhoto"/>
                 <Image x:Name="image4" Tapped="ChangePhoto"/>
+                <Image x:Name="image5" Tapped="ChangePhoto"/>
             </StackPanel>
             <Button Name="PhotoButton" Tapped="PhotoButton_Tapped" VerticalAlignment="Center" IsEnabled="True" Visibility="Collapsed" >
                 <Viewbox MaxHeight="40" MaxWidth="40">
@@ -54,5 +55,6 @@
                 </Grid>
             </Button>-->
         </StackPanel>
+        <Slider x:Name="slider" HorizontalAlignment="Left" Margin="249,564,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
 </Page>
