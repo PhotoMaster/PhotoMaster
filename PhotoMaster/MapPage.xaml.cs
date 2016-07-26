@@ -493,5 +493,40 @@ namespace PhotoMaster
         {
             isWalkAroundModeEnabled = false;
         }
+
+        private async void toggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        {
+            var toggle = sender as ToggleSwitch;
+            if (toggle.IsOn)
+            {
+                isWalkAroundModeEnabled = true;
+
+                if (shouldShowNotification)
+                {
+                    var messageDialog = new MessageDialog("You can go around while Cortana will remind you when you get close to a beautiful & nice to take a photo place.",
+                        "Walk Around Mode:");
+
+                    // Add commands and set their callbacks; both buttons use the same callback function instead of inline event handlers
+                    messageDialog.Commands.Add(new UICommand(
+                        "Don't show again",
+                        new UICommandInvokedHandler(this.CommandInvokedHandler)));
+                    messageDialog.Commands.Add(new UICommand(
+                        "Close",
+                        new UICommandInvokedHandler(this.CommandInvokedHandler)));
+
+                    // Set the command that will be invoked by default
+                    messageDialog.DefaultCommandIndex = 0;
+
+                    // Set the command to be invoked when escape is pressed
+                    messageDialog.CancelCommandIndex = 1;
+
+                    await messageDialog.ShowAsync();
+                }
+            }
+            else
+            {
+                isWalkAroundModeEnabled = false;
+            }
+        }
     }
 }
