@@ -10,12 +10,20 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <!--<TextBlock Height="30" Margin="29,31,178,0" TextWrapping="Wrap" Text="Photo Details" VerticalAlignment="Top" FontSize="21.333"/>-->
-        <Image x:Name="image" Margin="29,100,39,191"/>
-        <TextBlock x:Name="detail" Height="106" Margin="29,0,39,60" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom"/>
-        <Image x:Name="image1" HorizontalAlignment="Left" Margin="10,261,0,288" Width="86" Source="Assets/arrow-left.gif"/>
-        <Image x:Name="image1_Copy" HorizontalAlignment="Right" Margin="0,261,10,288" Width="86" Source="Assets/arrow-right.gif"/>
-        <CheckBox x:Name="checkBox" Content="CheckBox" HorizontalAlignment="Stretch" Margin="29,5,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked"/>
-        <Button x:Name="button" Content="Take Photo" HorizontalAlignment="Center" Margin="257,5,10,0" VerticalAlignment="Top" RenderTransformOrigin="-0.434,1.198" Click="button_Click"/>
+        <Image x:Name="image" Margin="29,46,39,245"/>
+        <TextBlock x:Name="detail" Height="68" Margin="29,0,39,125" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom"/>
+        <CheckBox x:Name="checkBox" Content="Mark as interested" HorizontalAlignment="Stretch" Margin="138,399,39,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Height="52"/>
+        <!--<Button x:Name="button" Content="Take Photo" HorizontalAlignment="Center" Margin="93,556,84,0" VerticalAlignment="Top" RenderTransformOrigin="-0.434,1.198" Click="button_Click" Height="50
+                " Width="183"/>-->
+        <Canvas Height="79" Margin="64,0,57,20" VerticalAlignment="Bottom">
+            <Rectangle HorizontalAlignment="Center" Height="79" Stroke="#00000000" VerticalAlignment="Top" Width="239" Fill="#7F7E7E83" Tapped="button_Click"/>
+            <Image x:Name="image_Copy" Height="51" VerticalAlignment="Top" Width="51" Source="Assets/index2.jpg" Tapped="button_Click" Canvas.Left="20" Canvas.Top="16"/>
+            <TextBlock x:Name="textBlock1_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="40" Width="168" TextAlignment="Center" Foreground="White" FontSize="20" FontWeight="Bold" Tapped="button_Click" Canvas.Left="71" Canvas.Top="28">
+                <Run Text="Take"/>
+                <Run Text=" Photo"/>
+            </TextBlock>
+
+        </Canvas>
 
     </Grid>
 </Page>
