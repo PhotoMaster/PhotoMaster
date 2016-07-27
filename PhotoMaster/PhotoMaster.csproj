@@ -209,6 +209,13 @@
     <Content Include="Assets\photos\099-small-check.jpg" />
     <Content Include="Assets\photos\099-small.jpg" />
     <Content Include="Assets\photos\099.jpg" />
+    <Content Include="Assets\photos\weiruan1-small.jpg" />
+    <Content Include="Assets\photos\weiruan1.jpg" />
+    <Content Include="Assets\photos\weiruan2-small.jpg" />
+    <Content Include="Assets\photos\weiruan2.jpg" />
+    <Content Include="Assets\photos\weiruan3-small.jpg" />
+    <Content Include="Assets\photos\weiruan3.jpg" />
+    <Content Include="Assets\self.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

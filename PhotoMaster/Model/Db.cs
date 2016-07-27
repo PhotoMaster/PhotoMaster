@@ -50,7 +50,7 @@ namespace PhotoMaster.Model
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/021.jpg"));
             position = new BasicGeoposition() { Latitude = 39.997222, Longitude = 116.279614 };
             gpsPoint = new Geopoint(position);
-            photo = new Photo(21, image, gpsPoint, 91, "ms-appx:///Assets/photos/021-small.jpg", "ms-appx:///Assets/photos/021-small-check.jpg");
+            photo = new Photo(21, image, gpsPoint, 91, "ms-appx:///Assets/photos/021-small.jpg", "ms-appx:///Assets/photos/021-small-check.jpg", "Yu Lan Tang Kunming Lake at the Summer Palace. Qing Emperor Qianlong fifteen years (1750) built Guangxu years (1875-1908) reconstruction. It is the palace of Emperor Guangxu.Guangxu 24 years (1898) after the failure of the Hundred Days Reform, the Empress had imprisoned Guangxu here.");
             photos.Add(photo);
 
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/022.jpg"));
@@ -62,7 +62,7 @@ namespace PhotoMaster.Model
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/040.jpg"));
             position = new BasicGeoposition() { Latitude = 39.990712, Longitude = 116.27941 };
             gpsPoint = new Geopoint(position);
-            photo = new Photo(40, image, gpsPoint, 89, "ms-appx:///Assets/photos/040-small.jpg", "ms-appx:///Assets/photos/040-small-check.jpg", "Summer bull located on the north banks of the profile, such as kiosks, when Emperor Qianlong which adorn this is the hope that it Wing Yau water town, long flood surrender to the garden and nearby people bring endless Xiangfu. To illustrate the significance of the construction of the bull, the emperor deliberately wrote a four - character inscription, with the body of the book of seal engraved on the front and the bull. Copper is the Summer Palace, Kunming Lake Cattle east shore of a unique landscape and art treasures.");
+            photo = new Photo(40, image, gpsPoint, 89, "ms-appx:///Assets/photos/040-small.jpg", "ms-appx:///Assets/photos/040-small-check.jpg", "Summer bull located on the north banks of the profile, such as kiosks, when Emperor Qianlong which adorn this is the hope that it Wing Yau water town, long flood surrender to the garden and nearby people bring endless Xiangfu.");
             photos.Add(photo);
 
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/060.jpg"));
@@ -75,6 +75,24 @@ namespace PhotoMaster.Model
             position = new BasicGeoposition() { Latitude = 39.998693, Longitude = 116.275247 };
             gpsPoint = new Geopoint(position);
             photo = new Photo(17, image, gpsPoint, 86, "ms-appx:///Assets/photos/017-small.jpg", "ms-appx:///Assets/photos/017-small-check.jpg");
+            photos.Add(photo);
+
+            image = new BitmapImage(new Uri("ms-appx:/Assets/photos/weiruan1.jpg"));
+            position = new BasicGeoposition() { Latitude = 39.979317, Longitude = 116.309959 };
+            gpsPoint = new Geopoint(position);
+            photo = new Photo(17, image, gpsPoint, 86, "ms-appx:///Assets/photos/weiruan1-small.jpg", "ms-appx:///Assets/photos/weiruan1-small-check.jpg");
+            photos.Add(photo);
+
+            image = new BitmapImage(new Uri("ms-appx:/Assets/photos/weiruan2.jpg"));
+            position = new BasicGeoposition() { Latitude = 39.978758, Longitude = 116.310582 };
+            gpsPoint = new Geopoint(position);
+            photo = new Photo(17, image, gpsPoint, 86, "ms-appx:///Assets/photos/weiruan2-small.jpg", "ms-appx:///Assets/photos/weiruan2-small-check.jpg");
+            photos.Add(photo);
+
+            image = new BitmapImage(new Uri("ms-appx:/Assets/photos/weiruan3.jpg"));
+            position = new BasicGeoposition() { Latitude = 39.981166, Longitude = 116.309498 };
+            gpsPoint = new Geopoint(position);
+            photo = new Photo(17, image, gpsPoint, 86, "ms-appx:///Assets/photos/weiruan3-small.jpg", "ms-appx:///Assets/photos/weiruan3-small-check.jpg");
             photos.Add(photo);
 
             image = new BitmapImage(new Uri("ms-appx:/Assets/photos/016.jpg"));

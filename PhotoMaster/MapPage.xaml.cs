@@ -171,10 +171,11 @@ namespace PhotoMaster
 
                         // Set the map location.
                         MapControl1.Center = cityCenter;
-                        MapControl1.ZoomLevel = 14;
+                        MapControl1.ZoomLevel = 14.8;
                         MapControl1.LandmarksVisible = true;
 
                         selfLocationIcon = new MapIcon();
+                        selfLocationIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/self.png"));
                         selfLocationIcon.Location = cityCenter;
                         selfLocationIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
                         selfLocationIcon.ZIndex = 0;
@@ -188,7 +189,7 @@ namespace PhotoMaster
                         // Handle the case  if access to location is denied.
                         // Set the map location.
                         MapControl1.Center = cityCenter;
-                        MapControl1.ZoomLevel = 14;
+                        MapControl1.ZoomLevel = 14.8;
                         MapControl1.LandmarksVisible = true;
                         break;
 
@@ -196,7 +197,7 @@ namespace PhotoMaster
                         // Handle the case if  an unspecified error occurs.
                         // Set the map location.
                         MapControl1.Center = cityCenter;
-                        MapControl1.ZoomLevel = 14;
+                        MapControl1.ZoomLevel = 14.8;
                         MapControl1.LandmarksVisible = true;
                         break;
                 }
@@ -243,7 +244,7 @@ namespace PhotoMaster
             if (result.Status == MapLocationFinderStatus.Success && result.Locations.Count != 0)
             {
                 MapControl1.Center = result.Locations[0].Point;
-                MapControl1.ZoomLevel = 14;
+                MapControl1.ZoomLevel = 14.8;
                 MapControl1.LandmarksVisible = true;
             }
             else
@@ -254,21 +255,21 @@ namespace PhotoMaster
 
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            // TO DO
-            suggestions.Clear();
-            /*
-            int maxSuggestion = 2;
-            List<string> similarNames = findSimilarNames(sender.Text);
-            for(int i=0;i<similarNames.Count || i< maxSuggestion; i++)
-            {
-                suggestions.Add(similarNames[i]);
-            }
-            */
-            suggestions.Add("suggestion1");
-            suggestions.Add("suggestion2");
+            //// TO DO
+            //suggestions.Clear();
+            ///*
+            //int maxSuggestion = 2;
+            //List<string> similarNames = findSimilarNames(sender.Text);
+            //for(int i=0;i<similarNames.Count || i< maxSuggestion; i++)
+            //{
+            //    suggestions.Add(similarNames[i]);
+            //}
+            //*/
+            //suggestions.Add("suggestion1");
+            //suggestions.Add("suggestion2");
 
-            // END
-            sender.ItemsSource = suggestions;
+            //// END
+            //sender.ItemsSource = suggestions;
         }
 
         private void OnMapTapped(MapControl sender, MapInputEventArgs args)
