@@ -10,9 +10,9 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <!--<TextBlock Height="30" Margin="29,31,178,0" TextWrapping="Wrap" Text="Photo Details" VerticalAlignment="Top" FontSize="21.333"/>-->
-        <Image x:Name="image" Margin="29,46,39,375"/>
-        <TextBlock x:Name="detail" Height="259" Margin="29,0,39,79" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Bottom"/>
-        <CheckBox x:Name="checkBox" Content="Mark as interested" HorizontalAlignment="Stretch" Margin="177,265,0,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" Height="0"/>
+        <Image x:Name="image" Margin="29,46,39,0" Height="200" VerticalAlignment="Top"/>
+        <TextBlock x:Name="detail" Margin="29,300,39,80" TextWrapping="Wrap" Text="TextBlock" />
+        <CheckBox x:Name="checkBox" Content="Mark as interested" Margin="0,265,10,0" VerticalAlignment="Top" Checked="checkBox_Checked" Unchecked="checkBox_Unchecked" HorizontalAlignment="Right"/>
         <!--<Button x:Name="button" Content="Take Photo" HorizontalAlignment="Center" Margin="93,556,84,0" VerticalAlignment="Top" RenderTransformOrigin="-0.434,1.198" Click="button_Click" Height="50
                 " Width="183"/>-->
         <Canvas Height="59" Margin="64,0,57,20" VerticalAlignment="Bottom">
